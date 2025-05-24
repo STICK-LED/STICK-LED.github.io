@@ -182,13 +182,19 @@
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(255, 140, 0, 0.4);
         }
+        
     </style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">STICKLEDD</div>
-            <ul>
+            <a href="../index.html" class="logo">STICKLEDD</a>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul id="nav-menu">
                 <li><a href="../index.html">Главная</a></li>
                 <li><a href="../scripts.html">Скрипты</a></li>
                 <li><a href="../tutorials.html">Туториалы</a></li>
@@ -268,5 +274,7 @@
             </a>
         </div>
     </footer>
+
+    <script src="../js/menu.js"></script>
 </body>
 </html> 

@@ -7,12 +7,101 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .script-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .script-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .script-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background-color: var(--bg-card-hover);
+            border-color: rgba(255, 140, 0, 0.3);
+        }
+        
+        .card-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to top, var(--bg-card), transparent);
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .card-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .card-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        
+        .script-tag {
+            display: inline-block;
+            background-color: rgba(255, 140, 0, 0.1);
+            color: var(--primary-color);
+            padding: 0.3rem 0.6rem;
+            font-size: 0.7rem;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .script-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">STICKLEDD</div>
-            <ul>
+            <a href="index.html" class="logo">STICKLEDD</a>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul id="nav-menu">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="scripts.html">Скрипты</a></li>
                 <li><a href="tutorials.html">Туториалы</a></li>
@@ -58,15 +147,44 @@
                     </div>
                 </div>
                 
+                <div class="script-card" onclick="location.href='modules/qrgenerator.html'">
+                    <div class="card-image" style="background-image: url('assets/qrcode.png');"></div>
+                    <div class="card-content">
+                        <h3>QR-код Generator</h3>
+                        <p>Создание QR-кодов с различными типами данных: URL, текст, WiFi доступ, контакты</p>
+                        <span class="script-tag">QR</span>
+                        <span class="script-tag">ГЕНЕРАТОР</span>
+                        <span class="script-tag">ДАННЫЕ</span>
+                    </div>
+                </div>
+                
+                <div class="script-card" onclick="location.href='modules/speedtest.html'">
+                    <div class="card-image" style="background-image: url('assets/speedtest.jpg');"></div>
+                    <div class="card-content">
+                        <h3>Speed Internet Test</h3>
+                        <p>Тест скорости интернет-соединения: замер загрузки, выгрузки и пинга</p>
+                        <span class="script-tag">СКОРОСТЬ</span>
+                        <span class="script-tag">ИНТЕРНЕТ</span>
+                        <span class="script-tag">ТЕСТ</span>
+                    </div>
+                </div>
+                
             </div>
         </section>
     </main>
 
     <footer>
-        <p>© 2025 chatgpthvh. Сделно с любовью ❤.</p>
+        <p>© 2025 chatgpthvh. Сделано с любовью ❤</p>
         <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
             <i class="fab fa-telegram"></i> STICKLEDD
         </a>
+        <div style="margin-top: 15px; text-align: center;">
+            <a href="https://t.me/+l7iFO2BkvLljNDFi" style="color: var(--primary-color); font-weight: bold; text-decoration: underline;">
+                <i class="fas fa-question-circle"></i> Есть вопросы или проблемы? Пишите в ТГ! Поможем!
+            </a>
+        </div>
     </footer>
+
+    <script src="js/menu.js"></script>
 </body>
 </html> 

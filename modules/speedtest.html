@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STICKLEDD - Тест скорости интернета</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .speedtest-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 107, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .speedtest-container:hover {
+            box-shadow: 0 0 50px rgba(255, 107, 0, 0.3);
+        }
+        
+        .speedtest-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .speedtest-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .speedtest-header p {
+            font-size: 1.1rem;
+            color: #ccc;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .speedtest-header::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff6b00, transparent);
+            margin: 20px auto 0;
+        }
+        
+        .test-button {
+            display: block;
+            width: 220px;
+            margin: 30px auto;
+            padding: 18px 15px;
+            background: linear-gradient(45deg, #ff6b00, #ff9500);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .test-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(255, 107, 0, 0.4);
+        }
+        
+        .test-button:hover::before {
+            left: 100%;
+        }
+        
+        .test-button:disabled {
+            background: linear-gradient(45deg, #a85400, #cc7a00);
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .test-status {
+            text-align: center;
+            color: #ff6b00;
+            margin: 15px 0;
+            min-height: 24px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px rgba(255, 107, 0, 0.3);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin: 25px 0;
+            overflow: hidden;
+            display: none;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(45deg, #ff6b00, #ff9500);
+            border-radius: 20px;
+            transition: width 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                         transparent, 
+                         rgba(255, 255, 255, 0.2), 
+                         transparent);
+            animation: progress-shine 2s infinite linear;
+        }
+        
+        @keyframes progress-shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .loader {
+            display: none;
+            width: 80px;
+            height: 80px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        .loader::before,
+        .loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: rgba(255, 107, 0, 0.4);
+            animation: pulse 2s ease-out infinite;
+        }
+        
+        .loader::after {
+            animation-delay: 1s;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .loader-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid rgba(255, 107, 0, 0.3);
+            border-top: 4px solid #ff6b00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .results {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .result-card {
+            width: 250px;
+            padding: 25px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.7), rgba(40, 40, 40, 0.7));
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 107, 0, 0.4);
+        }
+        
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.1), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+        
+        .result-card:hover::before {
+            opacity: 1;
+        }
+        
+        .result-icon {
+            font-size: 2rem;
+            color: #ff6b00;
+            margin-bottom: 15px;
+        }
+        
+        .result-card h3 {
+            color: #ff6b00;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+        }
+        
+        .gauge {
+            position: relative;
+            width: 100%;
+            height: 140px;
+            margin: 0 auto;
+        }
+        
+        .gauge-track {
+            position: relative;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 25px;
+        }
+        
+        .gauge-fill {
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            left: 0;
+            background: linear-gradient(90deg, #00ff00, #ff6b00);
+            border-radius: 10px;
+            transition: width 0.5s ease-out;
+        }
+        
+        .ping-gauge {
+            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00);
+        }
+        
+        .gauge-center {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .gauge-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .gauge-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .gauge-marks {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.8rem;
+        }
+        
+        .speed-interpretation {
+            margin-top: 50px;
+            padding: 25px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.7), rgba(40, 40, 40, 0.7));
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+        }
+        
+        .speed-interpretation h3 {
+            color: #ff6b00;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .speed-interpretation h3 i {
+            margin-right: 10px;
+        }
+        
+        .interpretation-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+        
+        .interpretation-card {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            text-align: left;
+        }
+        
+        .interpretation-card h4 {
+            color: #ff6b00;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .interpretation-scale {
+            display: flex;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .scale-segment {
+            flex: 1;
+            position: relative;
+        }
+        
+        .scale-segment.slow {
+            background: #ff3300;
+        }
+        
+        .scale-segment.medium {
+            background: #ffcc00;
+        }
+        
+        .scale-segment.good {
+            background: #66cc00;
+        }
+        
+        .scale-segment.excellent {
+            background: #00cc66;
+        }
+        
+        .ping-scale {
+            flex-direction: row-reverse;
+        }
+        
+        .interpretation-values {
+            display: flex;
+            justify-content: space-between;
+            color: #999;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .interpretation-list {
+            list-style-type: none;
+            padding-left: 0;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        .interpretation-list li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .dot.slow {
+            background: #ff3300;
+        }
+        
+        .dot.medium {
+            background: #ffcc00;
+        }
+        
+        .dot.good {
+            background: #66cc00;
+        }
+        
+        .dot.excellent {
+            background: #00cc66;
+        }
+        
+        .interpretation-note {
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .server-info {
+            margin-top: 40px;
+            padding: 25px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.7), rgba(40, 40, 40, 0.7));
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+        }
+        
+        .server-info h3 {
+            color: #ff6b00;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .server-info h3 i {
+            margin-right: 10px;
+        }
+        
+        .server-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 15px;
+        }
+        
+        .server-detail {
+            flex: 1;
+            min-width: 180px;
+            max-width: 250px;
+            display: flex;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            align-items: center;
+        }
+        
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 0, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff6b00;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+        
+        .detail-info {
+            flex: 1;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1rem;
+            color: #fff;
+            word-break: break-word;
+        }
+        
+        .history-container {
+            margin-top: 40px;
+            padding: 25px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.7), rgba(40, 40, 40, 0.7));
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            display: none;
+        }
+        
+        .history-container h3 {
+            color: #ff6b00;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .history-container h3 i {
+            margin-right: 10px;
+        }
+        
+        .history-table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #ccc;
+        }
+        
+        .history-table th, 
+        .history-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-table th {
+            background: linear-gradient(90deg, #ff6b00, #ff9500);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        .history-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .history-table tr:hover {
+            background-color: rgba(255, 107, 0, 0.1);
+        }
+        
+        .clear-history {
+            background: none;
+            border: 2px solid #ff6b00;
+            color: #ff6b00;
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin: 0 auto;
+            display: block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .clear-history:hover {
+            background-color: #ff6b00;
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+        
+        .clear-history i {
+            margin-right: 8px;
+        }
+        
+        .recommendations {
+            margin-top: 40px;
+            padding: 25px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.7), rgba(40, 40, 40, 0.7));
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+        }
+        
+        .recommendations h3 {
+            color: #ff6b00;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .recommendations h3 i {
+            margin-right: 10px;
+        }
+        
+        .recommendations-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .recommendation-card {
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 107, 0, 0.1);
+        }
+        
+        .recommendation-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 0, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff6b00;
+            font-size: 1.5rem;
+            margin: 0 auto 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .recommendation-card:hover .recommendation-icon {
+            background: rgba(255, 107, 0, 0.4);
+            transform: scale(1.1);
+        }
+        
+        .recommendation-card h4 {
+            color: #ff6b00;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .recommendation-card p {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        /* Стили для футера */
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+        }
+        
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Медиа-запросы для адаптивности */
+        @media (max-width: 768px) {
+            .speedtest-container {
+                padding: 20px;
+            }
+            
+            .results, 
+            .interpretation-container, 
+            .server-details, 
+            .recommendations-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .result-card, 
+            .interpretation-card, 
+            .server-detail, 
+            .recommendation-card {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .gauge {
+                height: 120px;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+            }
+        }
+        
+        .speed-excellent {
+            background: #00cc66 !important;
+        }
+        
+        .speed-good {
+            background: #66cc00 !important;
+        }
+        
+        .speed-medium {
+            background: #ffcc00 !important;
+        }
+        
+        .speed-slow {
+            background: #ff3300 !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html" class="logo">STICKLEDD</a>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul id="nav-menu">
+                <li><a href="../index.html">Главная</a></li>
+                <li><a href="../scripts.html">Скрипты</a></li>
+                <li><a href="../tutorials.html">Туториалы</a></li>
+                <li><a href="../devices.html">Устройства</a></li>
+                <li><a href="../tools.html">Инструменты</a></li>
+                <li><a href="../AI.html">ИИ Модели</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="content-section">
+            <div class="speedtest-container">
+                <div class="speedtest-header">
+                    <h2>Тест скорости интернета</h2>
+                    <p>Измерьте скорость вашего интернет-соединения: загрузку, выгрузку и пинг. Узнайте, насколько быстро и стабильно работает ваше соединение.</p>
+                </div>
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="test-status" id="testStatus"></div>
+                
+                <div class="loader" id="loader">
+                    <div class="loader-circle"></div>
+                </div>
+                
+                <button class="test-button" id="startTest">Начать тест</button>
+                
+                <div class="results">
+                    <div class="result-card">
+                        <div class="result-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3>Скорость загрузки</h3>
+                        <div class="gauge">
+                            <div class="gauge-track">
+                                <div class="gauge-fill" id="downloadGaugeFill"></div>
+                            </div>
+                            <div class="gauge-center">
+                                <div class="gauge-value" id="downloadSpeed">--</div>
+                                <div class="gauge-label">Мбит/с</div>
+                            </div>
+                            <div class="gauge-marks">
+                                <span>0</span>
+                                <span>25</span>
+                                <span>50</span>
+                                <span>75</span>
+                                <span>100+</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <h3>Скорость выгрузки</h3>
+                        <div class="gauge">
+                            <div class="gauge-track">
+                                <div class="gauge-fill" id="uploadGaugeFill"></div>
+                            </div>
+                            <div class="gauge-center">
+                                <div class="gauge-value" id="uploadSpeed">--</div>
+                                <div class="gauge-label">Мбит/с</div>
+                            </div>
+                            <div class="gauge-marks">
+                                <span>0</span>
+                                <span>12.5</span>
+                                <span>25</span>
+                                <span>37.5</span>
+                                <span>50+</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3>Пинг</h3>
+                        <div class="gauge">
+                            <div class="gauge-track">
+                                <div class="gauge-fill ping-gauge" id="pingGaugeFill"></div>
+                            </div>
+                            <div class="gauge-center">
+                                <div class="gauge-value" id="ping">--</div>
+                                <div class="gauge-label">мс</div>
+                            </div>
+                            <div class="gauge-marks">
+                                <span>300+</span>
+                                <span>200</span>
+                                <span>100</span>
+                                <span>50</span>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="speed-interpretation">
+                    <h3><i class="fas fa-chart-bar"></i> Интерпретация результатов</h3>
+                    <div class="interpretation-container">
+                        <div class="interpretation-card">
+                            <h4>Скорость загрузки</h4>
+                            <div class="interpretation-scale">
+                                <div class="scale-segment slow">Медленная</div>
+                                <div class="scale-segment medium">Средняя</div>
+                                <div class="scale-segment good">Хорошая</div>
+                                <div class="scale-segment excellent">Отличная</div>
+                            </div>
+                            <div class="interpretation-values">
+                                <span>0</span>
+                                <span>5</span>
+                                <span>25</span>
+                                <span>100</span>
+                                <span>Мбит/с</span>
+                            </div>
+                            <ul class="interpretation-list">
+                                <li><span class="dot slow"></span> &lt; 5 Мбит/с: Медленная</li>
+                                <li><span class="dot medium"></span> 5-25 Мбит/с: Средняя</li>
+                                <li><span class="dot good"></span> 25-100 Мбит/с: Хорошая</li>
+                                <li><span class="dot excellent"></span> &gt; 100 Мбит/с: Отличная</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="interpretation-card">
+                            <h4>Скорость выгрузки</h4>
+                            <div class="interpretation-scale">
+                                <div class="scale-segment slow">Медленная</div>
+                                <div class="scale-segment medium">Средняя</div>
+                                <div class="scale-segment good">Хорошая</div>
+                                <div class="scale-segment excellent">Отличная</div>
+                            </div>
+                            <div class="interpretation-values">
+                                <span>0</span>
+                                <span>1</span>
+                                <span>5</span>
+                                <span>20</span>
+                                <span>Мбит/с</span>
+                            </div>
+                            <ul class="interpretation-list">
+                                <li><span class="dot slow"></span> &lt; 1 Мбит/с: Медленная</li>
+                                <li><span class="dot medium"></span> 1-5 Мбит/с: Средняя</li>
+                                <li><span class="dot good"></span> 5-20 Мбит/с: Хорошая</li>
+                                <li><span class="dot excellent"></span> &gt; 20 Мбит/с: Отличная</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="interpretation-card">
+                            <h4>Пинг (задержка)</h4>
+                            <div class="interpretation-scale ping-scale">
+                                <div class="scale-segment slow">Медленный</div>
+                                <div class="scale-segment medium">Средний</div>
+                                <div class="scale-segment good">Хороший</div>
+                                <div class="scale-segment excellent">Отличный</div>
+                            </div>
+                            <div class="interpretation-values">
+                                <span>300+</span>
+                                <span>100</span>
+                                <span>50</span>
+                                <span>20</span>
+                                <span>мс</span>
+                            </div>
+                            <ul class="interpretation-list">
+                                <li><span class="dot excellent"></span> &lt; 20 мс: Отличный</li>
+                                <li><span class="dot good"></span> 20-50 мс: Хороший</li>
+                                <li><span class="dot medium"></span> 50-100 мс: Средний</li>
+                                <li><span class="dot slow"></span> &gt; 100 мс: Медленный</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="interpretation-note">* Результаты могут зависеть от вашего тарифного плана, загруженности сети и расстояния до серверов.</p>
+                </div>
+                
+                <div class="server-info" id="serverInfo">
+                    <h3><i class="fas fa-server"></i> Информация о соединении</h3>
+                    <div class="server-details">
+                        <div class="server-detail">
+                            <div class="detail-icon"><i class="fas fa-globe"></i></div>
+                            <div class="detail-info">
+                                <div class="detail-label">Сервер</div>
+                                <div class="detail-value" id="serverName">--</div>
+                            </div>
+                        </div>
+                        
+                        <div class="server-detail">
+                            <div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="detail-info">
+                                <div class="detail-label">Местоположение</div>
+                                <div class="detail-value" id="serverLocation">--</div>
+                            </div>
+                        </div>
+                        
+                        <div class="server-detail">
+                            <div class="detail-icon"><i class="fas fa-building"></i></div>
+                            <div class="detail-info">
+                                <div class="detail-label">Провайдер</div>
+                                <div class="detail-value" id="isp">--</div>
+                            </div>
+                        </div>
+                        
+                        <div class="server-detail">
+                            <div class="detail-icon"><i class="fas fa-network-wired"></i></div>
+                            <div class="detail-info">
+                                <div class="detail-label">IP-адрес</div>
+                                <div class="detail-value" id="ipAddress">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="history-container" id="historyContainer">
+                    <h3><i class="fas fa-history"></i> История тестов</h3>
+                    <div class="history-table-container">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Дата и время</th>
+                                    <th>Загрузка (Мбит/с)</th>
+                                    <th>Выгрузка (Мбит/с)</th>
+                                    <th>Пинг (мс)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="clear-history" id="clearHistory">
+                        <i class="fas fa-trash-alt"></i> Очистить историю
+                    </button>
+                </div>
+                
+                <div class="recommendations">
+                    <h3><i class="fas fa-lightbulb"></i> Советы по улучшению скорости</h3>
+                    <div class="recommendations-grid">
+                        <div class="recommendation-card">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <h4>Проверьте к какой сети вы подключены</h4>
+                            <p>Сигнал Wi-Fi может ослабевать из-за стен, расстояния и и тд. Подойдите ближе к роутеру</p>
+                        </div>
+                        
+                        <div class="recommendation-card">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-ethernet"></i>
+                            </div>
+                            <h4>Используйте проводное подключение/кабель(Для пк/Ноутбуков) </h4>
+                            <p>Для максимальной скорости и стабильности используйте подключение через Ethernet-кабель вместо WiFi</p>
+                        </div>
+                        
+                        <div class="recommendation-card">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-laptop"></i>
+                            </div>
+                            <h4>Проверьте свой план</h4>
+                            <p>Зайдите на сайт вашего провайдера, и там посмотрите какой план у вас куплен (тк там можеть быть ограничение на скорость)</p>
+                        </div>
+                        
+                        <div class="recommendation-card">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-router"></i>
+                            </div>
+                            <h4>Перезагрузите роутер/модем</h4>
+                            <p>Перезагрузка роутера и модема может решить многие проблемы с подключением</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>© 2025 chatgpthvh. Сделано с любовью ❤.</p>
+                <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
+                    <i class="fab fa-telegram"></i> STICKLEDD
+                </a>
+                <div style="margin-top: 15px; text-align: center;">
+                    <a href="https://t.me/+l7iFO2BkvLljNDFi" style="color: var(--primary-color); font-weight: bold; text-decoration: underline;">
+                        <i class="fas fa-question-circle"></i> Есть вопросы или проблемы? Пишите в ТГ! Поможем!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/menu.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startButton = document.getElementById('startTest');
+            const loader = document.getElementById('loader');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const testStatus = document.getElementById('testStatus');
+            const downloadSpeedElement = document.getElementById('downloadSpeed');
+            const uploadSpeedElement = document.getElementById('uploadSpeed');
+            const pingElement = document.getElementById('ping');
+            const serverNameElement = document.getElementById('serverName');
+            const serverLocationElement = document.getElementById('serverLocation');
+            const ispElement = document.getElementById('isp');
+            const ipAddressElement = document.getElementById('ipAddress');
+            const downloadGaugeFill = document.getElementById('downloadGaugeFill');
+            const uploadGaugeFill = document.getElementById('uploadGaugeFill');
+            const pingGaugeFill = document.getElementById('pingGaugeFill');
+            const historyContainer = document.getElementById('historyContainer');
+            const historyTableBody = document.getElementById('historyTableBody');
+            const clearHistoryButton = document.getElementById('clearHistory');
+            
+            let testInProgress = false;
+            let abortController = null;
+            let pingResults = [];
+            let downloadSpeed = 0;
+            let uploadSpeed = 0;
+            let pingTime = 0;
+            
+            loadTestHistory();
+            
+            startButton.addEventListener('click', function() {
+                if (testInProgress) {
+                    if (abortController) {
+                        abortController.abort();
+                    }
+                    testInProgress = false;
+                    showLoading(false);
+                    startButton.textContent = 'Начать тест';
+                    testStatus.textContent = 'Тест отменен';
+                    return;
+                }
+                
+                testInProgress = true;
+                resetResults();
+                showLoading(true);
+                startButton.textContent = 'Отменить тест';
+                
+                abortController = new AbortController();
+                
+                testStatus.textContent = 'Получение информации о сети...';
+                getConnectionInfo()
+                    .then(() => {
+                        testStatus.textContent = 'Тестирование пинга...';
+                        updateProgress(10);
+                        return measurePing();
+                    })
+                    .then(pingResult => {
+                        pingTime = pingResult;
+                        pingElement.textContent = Math.round(pingTime);
+                        
+                        const pingPercentage = Math.min(100, Math.max(0, (pingTime / 300) * 100));
+                        pingGaugeFill.style.width = pingPercentage + '%';
+                        
+                        testStatus.textContent = 'Тестирование скорости загрузки...';
+                        updateProgress(30);
+                        return measureDownloadSpeed();
+                    })
+                    .then(dlSpeed => {
+                        downloadSpeed = dlSpeed;
+                        downloadSpeedElement.textContent = downloadSpeed.toFixed(2);
+                        
+                        const downloadPercentage = Math.min(100, Math.max(0, (downloadSpeed / 100) * 100));
+                        downloadGaugeFill.style.width = downloadPercentage + '%';
+                        
+                        testStatus.textContent = 'Тестирование скорости выгрузки...';
+                        updateProgress(70);
+                        return measureUploadSpeed();
+                    })
+                    .then(ulSpeed => {
+                        uploadSpeed = ulSpeed;
+                        uploadSpeedElement.textContent = uploadSpeed.toFixed(2);
+                        
+                        const uploadPercentage = Math.min(100, Math.max(0, (uploadSpeed / 50) * 100));
+                        uploadGaugeFill.style.width = uploadPercentage + '%';
+                        
+                        updateProgress(100);
+                        testStatus.textContent = 'Тест завершен';
+                        
+                        saveTestResult(downloadSpeed, uploadSpeed, pingTime);
+                        
+                        testInProgress = false;
+                        showLoading(false);
+                        startButton.textContent = 'Начать тест';
+                    })
+                    .catch(error => {
+                        if (error.name === 'AbortError') {
+                            console.log('Тест был отменен пользователем');
+                        } else {
+                            console.error('Ошибка при выполнении теста:', error);
+                            testStatus.textContent = 'Ошибка: ' + error.message;
+                        }
+                        testInProgress = false;
+                        showLoading(false);
+                        startButton.textContent = 'Начать тест';
+                    });
+            });
+            
+            clearHistoryButton.addEventListener('click', function() {
+                localStorage.removeItem('speedTestHistory');
+                historyTableBody.innerHTML = '';
+                historyContainer.style.display = 'none';
+            });
+            
+            async function getConnectionInfo() {
+                const ipInfoUrls = [
+                    'https://ipapi.co/json/',
+                    'https://ipinfo.io/json',
+                    'https://api.ipify.org?format=json'
+                ];
+                
+                let connectionInfo = null;
+                
+                for (const url of ipInfoUrls) {
+                    if (!testInProgress) break;
+                    
+                    try {
+                        const response = await fetch(url, {
+                            signal: abortController.signal,
+                            headers: {
+                                'Accept': 'application/json',
+                                'Cache-Control': 'no-cache'
+                            }
+                        });
+                        
+                        if (!response.ok) {
+                            console.warn(`Ошибка при получении информации о соединении от ${url}: ${response.status} ${response.statusText}`);
+                            continue;
+                        }
+                        
+                        const data = await response.json();
+                        
+                        if (data) {
+                            connectionInfo = data;
+                            break;
+                        }
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            throw error;
+                        }
+                        console.warn(`Ошибка при получении информации о соединении от ${url}:`, error);
+                    }
+                }
+                
+                if (connectionInfo) {
+                    if (connectionInfo.ip) ipAddressElement.textContent = connectionInfo.ip;
+                    if (connectionInfo.org) ispElement.textContent = connectionInfo.org;
+                    else if (connectionInfo.asn && connectionInfo.org_name) ispElement.textContent = `${connectionInfo.asn} ${connectionInfo.org_name}`;
+                    else if (connectionInfo.isp) ispElement.textContent = connectionInfo.isp;
+                    
+                    if (connectionInfo.city && connectionInfo.country_name) 
+                        serverLocationElement.textContent = `${connectionInfo.city}, ${connectionInfo.country_name}`;
+                    else if (connectionInfo.city && connectionInfo.country) 
+                        serverLocationElement.textContent = `${connectionInfo.city}, ${connectionInfo.country}`;
+                    else if (connectionInfo.region && connectionInfo.country) 
+                        serverLocationElement.textContent = `${connectionInfo.region}, ${connectionInfo.country}`;
+                } else {
+                    ipAddressElement.textContent = 'Недоступно';
+                    ispElement.textContent = 'Неизвестно';
+                    serverLocationElement.textContent = 'Неизвестно';
+                }
+                
+            }
+            
+            async function measurePing() {
+                pingResults = [];
+                const pingUrls = [
+                    'https://www.google.com',
+                    'https://www.yandex.ru',
+                    'https://www.cloudflare.com',
+                    'https://www.bing.com',
+                    'https://www.wikipedia.org'
+                ];
+                const pingCount = 5;
+                
+                for (let i = 0; i < pingCount; i++) {
+                    if (!testInProgress) break;
+                    
+                    for (const pingUrl of pingUrls) {
+                        if (!testInProgress) break;
+                        
+                        try {
+                            const startTime = performance.now();
+                            await fetch(pingUrl, {
+                                method: 'HEAD',
+                                mode: 'no-cors',
+                                cache: 'no-store',
+                                redirect: 'follow',
+                                referrerPolicy: 'no-referrer',
+                                signal: abortController.signal
+                            });
+                            const endTime = performance.now();
+                            const pingTime = endTime - startTime;
+                            
+
+                            if (pingTime >= 5) {
+                                pingResults.push(pingTime);
+                                break; 
+                            }
+                        } catch (error) {
+                            if (error.name === 'AbortError') {
+                                throw error;
+                            }
+                            console.warn(`Ошибка при измерении пинга для ${pingUrl}:`, error);
+                            
+                        }
+                    }
+                    
+                    
+                    if (pingResults.length <= i && pingResults.length > 0) {
+                        const avgExistingPing = pingResults.reduce((sum, time) => sum + time, 0) / pingResults.length;
+                        pingResults.push(avgExistingPing);
+                    } else if (pingResults.length <= i) {
+                        pingResults.push(100);
+                    }
+                    
+                    const avgPing = pingResults.reduce((sum, time) => sum + time, 0) / pingResults.length;
+                    pingElement.textContent = Math.round(avgPing);
+                    
+                    const pingPercentage = Math.min(100, Math.max(0, (avgPing / 300) * 100));
+                    pingGaugeFill.style.width = pingPercentage + '%';
+                    
+                    if (avgPing < 20) {
+                        pingGaugeFill.style.background = '#00cc66';
+                    } else if (avgPing < 50) {
+                        pingGaugeFill.style.background = '#66cc00';
+                    } else if (avgPing < 100) {
+                        pingGaugeFill.style.background = '#ffcc00';
+                    } else {
+                        pingGaugeFill.style.background = '#ff3300';
+                    }
+                    
+                    updateProgress(10 + (i + 1) * 3);
+                    
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+                
+                if (pingResults.length === 0) {
+                    return 100;
+                }
+                
+                pingResults.sort((a, b) => a - b);
+                const middle = Math.floor(pingResults.length / 2);
+                
+                if (pingResults.length % 2 === 0) {
+                    return (pingResults[middle - 1] + pingResults[middle]) / 2;
+                }
+                
+                return pingResults[middle];
+            }
+            
+            async function measureDownloadSpeed() {
+                const testFiles = [
+                'https://ash-speed.hetzner.com/100MB.bin',
+                'https://ash-speed.hetzner.com/1GB.bin',
+                'https://ash-speed.hetzner.com/10GB.bin'
+                ];
+                
+                let totalBytesReceived = 0;
+                const startTime = performance.now();
+                const testDuration = 6000;
+                const endTime = startTime + testDuration;
+                
+                const speedMeasurements = [];
+                
+                try {
+                    let fileIndex = 0;
+                    while (performance.now() < endTime && testInProgress) {
+                        try {
+                            const response = await fetch(testFiles[fileIndex % testFiles.length], {
+                                method: 'GET',
+                                cache: 'no-store',
+                                mode: 'cors',
+                                credentials: 'omit',
+                                signal: abortController.signal,
+                                headers: {
+                                    'Cache-Control': 'no-cache',
+                                    'Pragma': 'no-cache'
+                                }
+                            });
+                            
+                            if (!response.ok) {
+                                console.warn(`Ошибка при загрузке тестового файла: ${response.status} ${response.statusText}`);
+                                fileIndex++;
+                                continue;
+                            }
+                            
+                            const reader = response.body.getReader();
+                            
+                            while (true) {
+                                const { done, value } = await reader.read();
+                                
+                                if (done || performance.now() >= endTime || !testInProgress) {
+                                    break;
+                                }
+                                
+                                totalBytesReceived += value.length;
+                                
+                                const elapsedSeconds = (performance.now() - startTime) / 1000;
+                                const currentSpeed = (totalBytesReceived * 8) / (1000000 * elapsedSeconds);
+                                
+                                speedMeasurements.push(currentSpeed);
+                                
+                                const averageSpeed = speedMeasurements.reduce((sum, speed) => sum + speed, 0) / speedMeasurements.length;
+                                
+                                downloadSpeedElement.textContent = averageSpeed.toFixed(2);
+                                
+                                const downloadPercentage = Math.min(100, Math.max(0, (averageSpeed / 100) * 100));
+                                downloadGaugeFill.style.width = downloadPercentage + '%';
+                                
+                                if (averageSpeed > 100) {
+                                    downloadGaugeFill.style.background = '#00cc66';
+                                } else if (averageSpeed > 25) {
+                                    downloadGaugeFill.style.background = '#66cc00';
+                                } else if (averageSpeed > 5) {
+                                    downloadGaugeFill.style.background = '#ffcc00';
+                                } else {
+                                    downloadGaugeFill.style.background = '#ff3300';
+                                }
+                                
+                                const progressPercentage = 30 + (elapsedSeconds / (testDuration / 1000)) * 40;
+                                updateProgress(Math.min(70, progressPercentage));
+                            }
+                        } catch (fetchError) {
+                            if (fetchError.name === 'AbortError') {
+                                throw fetchError;
+                            }
+                            console.warn('Ошибка при загрузке файла:', fetchError);
+                        }
+                        
+                        fileIndex++;
+                    }
+                    
+                    const elapsedSeconds = (performance.now() - startTime) / 1000;
+                    
+                    if (totalBytesReceived === 0) {
+                        return await fallbackDownloadTest();
+                    }
+                    
+                    const downloadSpeed = speedMeasurements.length > 0 
+                        ? speedMeasurements.reduce((sum, speed) => sum + speed, 0) / speedMeasurements.length
+                        : (totalBytesReceived * 8) / (1000000 * elapsedSeconds);
+                    
+                    return downloadSpeed;
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        throw error;
+                    }
+                    console.error('Ошибка при измерении скорости загрузки:', error);
+
+                    return await fallbackDownloadTest();
+                }
+            }
+            
+            async function fallbackDownloadTest() {
+                console.log("Использую альтернативный метод измерения скорости загрузки");
+                
+                const testImageUrls = [
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg/1280px-Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg',
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Crab_Nebula.jpg/1280px-Crab_Nebula.jpg',
+                    'https://picsum.photos/1600/1200?r=' + Math.random(),
+                    'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+                    'https://cdn.pixabay.com/photo/2016/05/05/02/37/sunset-1373171_1280.jpg'
+                ];
+                
+                const imageSizes = [900000, 800000, 700000, 600000, 500000];
+                let totalBytesReceived = 0;
+                const startTime = performance.now();
+                const testDuration = 6000;
+                const endTime = startTime + testDuration;
+                
+                const speedMeasurements = [];
+                
+                try {
+                    let imageIndex = 0;
+                    while (performance.now() < endTime && testInProgress && imageIndex < testImageUrls.length) {
+                        try {
+                            const imgStartTime = performance.now();
+                            const img = new Image();
+                            const loadPromise = new Promise((resolve, reject) => {
+                                img.onload = resolve;
+                                img.onerror = reject;
+                                img.src = testImageUrls[imageIndex] + (testImageUrls[imageIndex].includes('?') ? '&' : '?') + 'nocache=' + Math.random();
+                            });
+                            
+                            const timeoutPromise = new Promise((_, reject) => {
+                                setTimeout(() => reject(new Error('Timeout')), 3000);
+                            });
+                            
+                            await Promise.race([loadPromise, timeoutPromise]);
+                            const imgEndTime = performance.now();
+                            
+                            const approximateSize = imageSizes[imageIndex] || 500000;
+                            totalBytesReceived += approximateSize;
+                            
+                            const elapsedSeconds = (performance.now() - startTime) / 1000;
+                            const currentSpeed = (totalBytesReceived * 8) / (1000000 * elapsedSeconds);
+                            
+                            speedMeasurements.push(currentSpeed);
+                            
+                            const averageSpeed = speedMeasurements.reduce((sum, speed) => sum + speed, 0) / speedMeasurements.length;
+                            
+                            downloadSpeedElement.textContent = averageSpeed.toFixed(2);
+                            
+                            const downloadPercentage = Math.min(100, Math.max(0, (averageSpeed / 100) * 100));
+                            downloadGaugeFill.style.width = downloadPercentage + '%';
+                            
+                            if (averageSpeed > 100) {
+                                downloadGaugeFill.style.background = '#00cc66';
+                            } else if (averageSpeed > 25) {
+                                downloadGaugeFill.style.background = '#66cc00';
+                            } else if (averageSpeed > 5) {
+                                downloadGaugeFill.style.background = '#ffcc00';
+                            } else {
+                                downloadGaugeFill.style.background = '#ff3300';
+                            }
+                            
+                            const progressPercentage = 30 + (elapsedSeconds / (testDuration / 1000)) * 40;
+                            updateProgress(Math.min(70, progressPercentage));
+                        } catch (imgError) {
+                            console.warn('Ошибка при загрузке изображения:', imgError);
+                        }
+                        
+                        imageIndex++;
+                    }
+                    
+                    const elapsedSeconds = (performance.now() - startTime) / 1000;
+                    if (totalBytesReceived === 0 || elapsedSeconds === 0) {
+                        return 0;
+                    }
+                    
+                    const downloadSpeed = speedMeasurements.length > 0 
+                        ? speedMeasurements.reduce((sum, speed) => sum + speed, 0) / speedMeasurements.length
+                        : (totalBytesReceived * 8) / (1000000 * elapsedSeconds);
+                    
+                    return downloadSpeed;
+                } catch (error) {
+                    console.error('Ошибка при выполнении альтернативного теста скорости:', error);
+                    return 0;
+                }
+            }
+            
+            async function measureUploadSpeed() {
+                const uploadUrls = [
+                    'https://httpbin.org/post',
+                    'https://postman-echo.com/post',
+                    'https://jsonplaceholder.typicode.com/posts'
+                ];
+                
+                const chunkSize = 262144;
+                const testDuration = 6000;
+                
+                const speedMeasurements = [];
+                
+                try {
+                    let totalBytesSent = 0;
+                    const startTime = performance.now();
+                    const endTime = startTime + testDuration;
+                    
+                    const chunk = new Uint8Array(chunkSize);
+                    for (let i = 0; i < chunkSize; i++) {
+                        chunk[i] = Math.floor(Math.random() * 256);
+                    }
+                    
+                    let urlIndex = 0;
+                    let successfulUploads = 0;
+                    
+                    while (performance.now() < endTime && testInProgress) {
+                        try {
+                            const response = await fetch(uploadUrls[urlIndex % uploadUrls.length], {
+                                method: 'POST',
+                                body: chunk,
+                                signal: abortController.signal,
+                                headers: {
+                                    'Content-Type': 'application/octet-stream'
+                                }
+                            });
+                            
+                            if (response.ok) {
+                                totalBytesSent += chunkSize;
+                                successfulUploads++;
+                            }
+                            
+                            const elapsedSeconds = (performance.now() - startTime) / 1000;
+                            if (elapsedSeconds > 0) {
+                                const currentSpeed = (totalBytesSent * 8) / (1000000 * elapsedSeconds);
+                                
+                                speedMeasurements.push(currentSpeed);
+                                
+                                const averageSpeed = speedMeasurements.reduce((sum, speed) => sum + speed, 0) / speedMeasurements.length;
+                                
+                                uploadSpeedElement.textContent = averageSpeed.toFixed(2);
+                                
+                                const uploadPercentage = Math.min(100, Math.max(0, (averageSpeed / 50) * 100));
+                                uploadGaugeFill.style.width = uploadPercentage + '%';
+                                
+                                if (averageSpeed > 20) {
+                                    uploadGaugeFill.style.background = '#00cc66';
+                                } else if (averageSpeed > 5) {
+                                    uploadGaugeFill.style.background = '#66cc00';
+                                } else if (averageSpeed > 1) {
+                                    uploadGaugeFill.style.background = '#ffcc00';
+                                } else {
+                                    uploadGaugeFill.style.background = '#ff3300';
+                                }
+                                
+                                const progressPercentage = 70 + (elapsedSeconds / (testDuration / 1000)) * 30;
+                                updateProgress(Math.min(100, progressPercentage));
+                            }
+                        } catch (uploadError) {
+                            if (uploadError.name === 'AbortError') {
+                                throw uploadError;
+                            }
+                            console.warn('Ошибка при выгрузке данных:', uploadError);
+                        }
+                        
+                        urlIndex++;
+                    }
+                    
+                    const elapsedSeconds = (performance.now() - startTime) / 1000;
+                    
+                    if (successfulUploads === 0 || elapsedSeconds === 0) {
+                        return 0;
+                    }
+                    
+                    const uploadSpeed = speedMeasurements.length > 0 
+                        ? speedMeasurements.reduce((sum, speed) => sum + speed, 0) / speedMeasurements.length
+                        : (totalBytesSent * 8) / (1000000 * elapsedSeconds);
+                    
+                    return uploadSpeed;
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        throw error;
+                    }
+                    console.error('Ошибка при измерении скорости выгрузки:', error);
+                    return 0;
+                }
+            }
+            
+            function saveTestResult(downloadSpeed, uploadSpeed, pingTime) {
+                const now = new Date();
+                const formattedDate = now.toLocaleString();
+                
+                const testResult = {
+                    date: formattedDate,
+                    download: downloadSpeed.toFixed(2),
+                    upload: uploadSpeed.toFixed(2),
+                    ping: Math.round(pingTime)
+                };
+                
+                let history = JSON.parse(localStorage.getItem('speedTestHistory') || '[]');
+                history.unshift(testResult);
+                
+                if (history.length > 10) {
+                    history = history.slice(0, 10);
+                }
+                
+                localStorage.setItem('speedTestHistory', JSON.stringify(history));
+                
+                loadTestHistory();
+            }
+            
+            function loadTestHistory() {
+                const history = JSON.parse(localStorage.getItem('speedTestHistory') || '[]');
+                
+                if (history.length > 0) {
+                    historyContainer.style.display = 'block';
+                    historyTableBody.innerHTML = '';
+                    
+                    history.forEach(result => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${result.date}</td>
+                            <td>${result.download}</td>
+                            <td>${result.upload}</td>
+                            <td>${result.ping}</td>
+                        `;
+                        historyTableBody.appendChild(row);
+                    });
+                } else {
+                    historyContainer.style.display = 'none';
+                }
+            }
+            
+            function resetResults() {
+                downloadSpeedElement.textContent = '--';
+                uploadSpeedElement.textContent = '--';
+                pingElement.textContent = '--';
+                progressBar.style.width = '0%';
+                downloadGaugeFill.style.width = '0%';
+                uploadGaugeFill.style.width = '0%';
+                pingGaugeFill.style.width = '0%';
+                
+                downloadGaugeFill.style.background = '';
+                uploadGaugeFill.style.background = '';
+                pingGaugeFill.style.background = '';
+                
+                testStatus.textContent = '';
+            }
+            
+            function showLoading(show) {
+                loader.style.display = show ? 'block' : 'none';
+                progressContainer.style.display = show ? 'block' : 'none';
+                startButton.disabled = false;
+            }
+            
+            function updateProgress(percent) {
+                progressBar.style.width = percent + '%';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -7,12 +7,235 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .tutorial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .tutorial-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tutorial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background-color: var(--bg-card-hover);
+        }
+        
+        .tutorial-header {
+            padding: 1.5rem 1.5rem 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tutorial-header h3 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.3rem;
+        }
+        
+        .tutorial-tag {
+            background-color: rgba(255, 140, 0, 0.1);
+            color: var(--primary-color);
+            padding: 0.3rem 0.6rem;
+            font-size: 0.7rem;
+            border-radius: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .tutorial-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tutorial-content p {
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            flex-grow: 1;
+        }
+        
+        .tutorial-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: var(--button-shadow);
+        }
+        
+        .tutorial-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: var(--bg-card);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.3s;
+            position: relative;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary-color);
+        }
+        
+        .modal-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .device-support {
+            margin: 2rem 0;
+        }
+        
+        .device-support h4 {
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .compatibility {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .device {
+            display: flex;
+            align-items: center;
+            margin-right: 1.5rem;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .compatible {
+            background-color: #4CAF50;
+        }
+        
+        .not-compatible {
+            background-color: #F44336;
+        }
+        
+        .example-actions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            box-shadow: var(--button-shadow);
+        }
+        
+        .download-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .download-btn i {
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tutorial-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 90%;
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">STICKLEDD</div>
-            <ul>
+            <a href="index.html" class="logo">STICKLEDD</a>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul id="nav-menu">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="scripts.html">Скрипты</a></li>
                 <li><a href="tutorials.html">Туториалы</a></li>
@@ -48,23 +271,7 @@
                         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/j4GFQ4uzlVM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                     
-                    <div class="device-support">
-                        <h4>Поддержка устройств:</h4>
-                        <div class="compatibility">
-                            <div class="device">
-                                <span class="indicator compatible"></span>
-                                <span class="device-name">M5StickPlus2</span>
-                            </div>
-                            <div class="device">
-                                <span class="indicator compatible"></span>
-                                <span class="device-name">T-Embed</span>
-                            </div>
-                            <div class="device">
-                                <span class="indicator compatible"></span>
-                                <span class="device-name">Cardputer</span>
-                            </div>
-                        </div>
-                    </div>
+
                     
                     <div class="example-actions">
                         <button class="download-btn" onclick="downloadExample()">
@@ -77,10 +284,15 @@
     </main>
 
     <footer>
-        <p>© 2025 chatgpthvh. Сделно с любовью ❤.</p>
+        <p>© 2025 chatgpthvh. Сделано с любовью ❤</p>
         <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
             <i class="fab fa-telegram"></i> STICKLEDD
         </a>
+        <div style="margin-top: 15px; text-align: center;">
+            <a href="https://t.me/+l7iFO2BkvLljNDFi" style="color: var(--primary-color); font-weight: bold; text-decoration: underline;">
+                <i class="fas fa-question-circle"></i> Есть вопросы или проблемы? Пишите в ТГ! Поможем!
+            </a>
+        </div>
     </footer>
 
     <script>
@@ -120,5 +332,7 @@
             }, 100);
         }
     </script>
+
+    <script src="js/menu.js"></script>
 </body>
 </html> 
