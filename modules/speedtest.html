@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         .speedtest-container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 30px;
             background: rgba(0, 0, 0, 0.7);
@@ -773,6 +773,32 @@
         .speed-slow {
             background: #ff3300 !important;
         }
+        .sticky-footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(18, 18, 18, 0.97);
+            backdrop-filter: blur(10px);
+            padding: 1.1rem 0 0.7rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 4000;
+            width: 100vw;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        @media (max-width: 600px) {
+            .sticky-footer {
+                font-size: 0.95rem;
+                padding: 0.7rem 0 0.5rem 0;
+            }
+        }
+        body { padding-bottom: 70px; }
     </style>
 </head>
 <body>
@@ -789,6 +815,7 @@
                 <li><a href="../scripts.html">Скрипты</a></li>
                 <li><a href="../tutorials.html">Туториалы</a></li>
                 <li><a href="../devices.html">Устройства</a></li>
+                <li><a href="../schemes.html">Схемы</a></li>
                 <li><a href="../tools.html">Инструменты</a></li>
                 <li><a href="../AI.html">ИИ Модели</a></li>
             </ul>
@@ -811,6 +838,10 @@
                 
                 <div class="loader" id="loader">
                     <div class="loader-circle"></div>
+                </div>
+                
+                <div id="timeRemaining" style="text-align: center; margin: 10px 0; font-family: 'Orbitron', sans-serif; color: #ff6b00; font-size: 1.2rem; display: none;">
+                    Осталось: <span id="remainingTime">00:00</span> (Будет меньше 30 секунд)
                 </div>
                 
                 <button class="test-button" id="startTest">Начать тест</button>
@@ -1059,20 +1090,12 @@
         </section>
     </main>
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>Контакты</h3>
-                <p>© 2025 chatgpthvh. Сделано с любовью ❤.</p>
-                <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
-                    <i class="fab fa-telegram"></i> STICKLEDD
-                </a>
-                <div style="margin-top: 15px; text-align: center;">
-                    <a href="https://t.me/+l7iFO2BkvLljNDFi" style="color: var(--primary-color); font-weight: bold; text-decoration: underline;">
-                        <i class="fas fa-question-circle"></i> Есть вопросы или проблемы? Пишите в ТГ! Поможем!
-                    </a>
-                </div>
-            </div>
+    <footer class="sticky-footer">
+        <div class="footer-content">
+            <div>© 2025 chatgpthvh. Сделано с любовью ❤.</div>
+            <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
+                <i class="fab fa-telegram"></i> STICKLEDD
+            </a>
         </div>
     </footer>
 
@@ -1104,6 +1127,8 @@
             let downloadSpeed = 0;
             let uploadSpeed = 0;
             let pingTime = 0;
+            let timerInterval = null;
+            let testEndTime = 0;
             
             loadTestHistory();
             
@@ -1116,6 +1141,8 @@
                     showLoading(false);
                     startButton.textContent = 'Начать тест';
                     testStatus.textContent = 'Тест отменен';
+                    clearInterval(timerInterval);
+                    document.getElementById('timeRemaining').style.display = 'none';
                     return;
                 }
                 
@@ -1123,6 +1150,15 @@
                 resetResults();
                 showLoading(true);
                 startButton.textContent = 'Отменить тест';
+                
+                const totalTestDuration = 120000;
+                testEndTime = Date.now() + totalTestDuration;
+                updateRemainingTime();
+                
+                document.getElementById('timeRemaining').style.display = 'block';
+                
+                clearInterval(timerInterval);
+                timerInterval = setInterval(updateRemainingTime, 100);
                 
                 abortController = new AbortController();
                 
@@ -1170,6 +1206,8 @@
                         testInProgress = false;
                         showLoading(false);
                         startButton.textContent = 'Начать тест';
+                        clearInterval(timerInterval);
+                        document.getElementById('timeRemaining').style.display = 'none';
                     })
                     .catch(error => {
                         if (error.name === 'AbortError') {
@@ -1181,6 +1219,8 @@
                         testInProgress = false;
                         showLoading(false);
                         startButton.textContent = 'Начать тест';
+                        clearInterval(timerInterval);
+                        document.getElementById('timeRemaining').style.display = 'none';
                     });
             });
             
@@ -1260,6 +1300,8 @@
                     'https://www.wikipedia.org'
                 ];
                 const pingCount = 5;
+                const startTime = performance.now();
+                const minPingTestDuration = 5000;
                 
                 for (let i = 0; i < pingCount; i++) {
                     if (!testInProgress) break;
@@ -1323,6 +1365,12 @@
                     await new Promise(resolve => setTimeout(resolve, 200));
                 }
                 
+                const elapsedTime = performance.now() - startTime;
+                if (elapsedTime < minPingTestDuration) {
+                    testStatus.textContent = 'Анализ стабильности пинга...';
+                    await new Promise(resolve => setTimeout(resolve, minPingTestDuration - elapsedTime));
+                }
+                
                 if (pingResults.length === 0) {
                     return 100;
                 }
@@ -1339,22 +1387,18 @@
             
             async function measureDownloadSpeed() {
                 const testFiles = [
-                    'https://speed.cloudflare.com/__down?bytes=25000000',
-                    'https://speedtest.sea01.softlayer.com/downloads/test100.zip',
-                    'https://speedtest-nyc1.digitalocean.com/100mb.test',
-                    'https://ash-speed.hetzner.com/100MB.bin',
-                    'https://speed.cloudflare.com/__down?bytes=100000000'
+                    'https://speed.cloudflare.com/__down?bytes=100000000000',
                 ];
                 
                 let totalBytesReceived = 0;
                 const startTime = performance.now();
-                const testDuration = 10000; // Увеличено до 10 секунд
+                const testDuration = 30000;
+                const minTestDuration = 5000;
                 const endTime = startTime + testDuration;
                 
                 const speedMeasurements = [];
                 
                 try {
-                    // Создаем несколько параллельных запросов для более точного измерения высокой скорости
                     const parallelConnections = 3;
                     let activeConnections = 0;
                     let fileIndex = 0;
@@ -1383,7 +1427,7 @@
                             if (!response.ok) {
                                 console.warn(`Ошибка при загрузке тестового файла: ${response.status} ${response.statusText}`);
                                 activeConnections--;
-                                runConnection(); // Пробуем следующий файл
+                                runConnection();
                                 return;
                             }
                             
@@ -1403,7 +1447,6 @@
                                 
                                 speedMeasurements.push(currentSpeed);
                                 
-                                // Используем последние 5 измерений для более стабильного показателя
                                 const recentMeasurements = speedMeasurements.slice(-5);
                                 const averageSpeed = recentMeasurements.reduce((sum, speed) => sum + speed, 0) / recentMeasurements.length;
                                 
@@ -1434,22 +1477,24 @@
                         
                         activeConnections--;
                         
-                        // Если тест еще продолжается, запускаем еще одно соединение
                         if (performance.now() < endTime && testInProgress) {
                             runConnection();
                         }
                     };
                     
-                    // Запускаем несколько параллельных соединений
                     const connectionPromises = [];
                     for (let i = 0; i < parallelConnections; i++) {
                         connectionPromises.push(runConnection());
                     }
                     
-                    // Ждем завершения всех соединений или завершения по времени
-                    await Promise.race([
+                        await Promise.race([
                         Promise.all(connectionPromises),
-                        new Promise(resolve => setTimeout(resolve, testDuration))
+                        new Promise(resolve => {
+                            const minEndTime = startTime + minTestDuration;
+                            const actualEndTime = Math.max(minEndTime, endTime);
+                            const waitTime = actualEndTime - performance.now();
+                            setTimeout(resolve, Math.max(0, waitTime));
+                        })
                     ]);
                     
                     const elapsedSeconds = (performance.now() - startTime) / 1000;
@@ -1458,9 +1503,6 @@
                         return await fallbackDownloadTest();
                     }
                     
-                    // Рассчитываем среднюю скорость загрузки
-                    // Используем последние 50% измерений для более точного результата
-                    // Это помогает исключить начальное время установки соединения
                     const halfIndex = Math.floor(speedMeasurements.length / 2);
                     const relevantMeasurements = speedMeasurements.slice(halfIndex);
                     
@@ -1493,7 +1535,8 @@
                 const imageSizes = [900000, 800000, 700000, 600000, 500000];
                 let totalBytesReceived = 0;
                 const startTime = performance.now();
-                const testDuration = 6000;
+                const testDuration = 30000;
+                const minTestDuration = 5000;
                 const endTime = startTime + testDuration;
                 
                 const speedMeasurements = [];
@@ -1501,8 +1544,7 @@
                 try {
                     let imageIndex = 0;
                     
-                    // Загружаем несколько изображений параллельно
-                    const parallelDownloads = 5; // Увеличиваем число параллельных загрузок
+                    const parallelDownloads = 5;
                     const downloadPromises = [];
                     
                     for (let i = 0; i < parallelDownloads && i < testImageUrls.length; i++) {
@@ -1522,7 +1564,7 @@
                             });
                             
                             const timeoutPromise = new Promise((_, reject) => {
-                                setTimeout(() => reject(new Error('Timeout')), 5000); // Увеличиваем таймаут
+                                setTimeout(() => reject(new Error('Timeout')), 5000);
                             });
                             
                             await Promise.race([loadPromise, timeoutPromise]);
@@ -1537,7 +1579,6 @@
                                 
                                 speedMeasurements.push(currentSpeed);
                                 
-                                // Используем последние 3 измерения для более стабильного показателя
                                 const recentMeasurements = speedMeasurements.slice(-3);
                                 const averageSpeed = recentMeasurements.reduce((sum, speed) => sum + speed, 0) / recentMeasurements.length;
                                 
@@ -1561,13 +1602,19 @@
                         }
                     }
                     
+                    await Promise.all(downloadPromises);
+                    
+                    const currentTime = performance.now();
+                    const minEndTime = startTime + minTestDuration;
+                    if (currentTime < minEndTime) {
+                        await new Promise(resolve => setTimeout(resolve, minEndTime - currentTime));
+                    }
+                    
                     const elapsedSeconds = (performance.now() - startTime) / 1000;
                     if (totalBytesReceived === 0 || elapsedSeconds === 0) {
                         return 0;
                     }
                     
-                    // Рассчитываем среднюю скорость загрузки
-                    // Используем последние 50% измерений для более точного результата
                     const halfIndex = Math.max(0, Math.floor(speedMeasurements.length / 2));
                     const relevantMeasurements = speedMeasurements.slice(halfIndex);
                     
@@ -1575,7 +1622,6 @@
                         ? relevantMeasurements.reduce((sum, speed) => sum + speed, 0) / relevantMeasurements.length
                         : (totalBytesReceived * 8) / (1000000 * elapsedSeconds);
                     
-                    // Умножаем результат на 1.5, так как метод с изображениями обычно недооценивает скорость
                     return downloadSpeed * 1.5;
                 } catch (error) {
                     console.error('Ошибка при выполнении альтернативного теста скорости:', error);
@@ -1591,8 +1637,9 @@
                     'https://reqres.in/api/users'
                 ];
                 
-                const chunkSize = 1048576; // Увеличиваем размер чанка до 1MB
-                const testDuration = 10000; // Увеличиваем до 10 секунд
+                const chunkSize = 1048576;
+                const testDuration = 30000;
+                const minTestDuration = 5000;
                 
                 const speedMeasurements = [];
                 
@@ -1601,11 +1648,9 @@
                     const startTime = performance.now();
                     const endTime = startTime + testDuration;
                     
-                    // Создаем несколько параллельных соединений
                     const parallelConnections = 3;
                     let activeConnections = 0;
                     
-                    // Создаем данные для выгрузки
                     const chunk = new Uint8Array(chunkSize);
                     for (let i = 0; i < chunkSize; i++) {
                         chunk[i] = Math.floor(Math.random() * 256);
@@ -1634,7 +1679,6 @@
                                 totalBytesSent += chunkSize;
                                 successfulUpload = true;
                                 
-                                // Сразу запускаем следующую выгрузку с тем же URL
                                 if (performance.now() < endTime && testInProgress) {
                                     uploadTask(urlIndex);
                                 }
@@ -1646,11 +1690,9 @@
                                 
                                 speedMeasurements.push(currentSpeed);
                                 
-                                // Используем последние 3 измерения для более стабильного показателя
                                 const recentMeasurements = speedMeasurements.slice(-3);
                                 const averageSpeed = recentMeasurements.reduce((sum, speed) => sum + speed, 0) / recentMeasurements.length;
                                 
-                                // Умножаем на коэффициент для компенсации ограничений API
                                 const adjustedSpeed = averageSpeed * 2.5;
                                 
                                 uploadSpeedElement.textContent = adjustedSpeed.toFixed(2);
@@ -1680,22 +1722,24 @@
                         
                         activeConnections--;
                         
-                        // Если не удалось загрузить, пробуем другой URL
                         if (!successfulUpload && performance.now() < endTime && testInProgress) {
                             uploadTask((urlIndex + 1) % uploadUrls.length);
                         }
                     };
                     
-                    // Запускаем параллельные соединения
                     const uploadPromises = [];
                     for (let i = 0; i < parallelConnections; i++) {
                         uploadPromises.push(uploadTask(i % uploadUrls.length));
                     }
                     
-                    // Ждем завершения всех соединений или завершения по времени
                     await Promise.race([
                         Promise.all(uploadPromises),
-                        new Promise(resolve => setTimeout(resolve, testDuration))
+                        new Promise(resolve => {
+                            const minEndTime = startTime + minTestDuration;
+                            const actualEndTime = Math.max(minEndTime, endTime);
+                            const waitTime = actualEndTime - performance.now();
+                            setTimeout(resolve, Math.max(0, waitTime));
+                        })
                     ]);
                     
                     const elapsedSeconds = (performance.now() - startTime) / 1000;
@@ -1704,8 +1748,6 @@
                         return 0;
                     }
                     
-                    // Рассчитываем итоговую скорость
-                    // Используем последние 50% измерений для более точного результата
                     const halfIndex = Math.max(0, Math.floor(speedMeasurements.length / 2));
                     const relevantMeasurements = speedMeasurements.slice(halfIndex);
                     
@@ -1713,7 +1755,6 @@
                         ? relevantMeasurements.reduce((sum, speed) => sum + speed, 0) / relevantMeasurements.length
                         : (totalBytesSent * 8) / (1000000 * elapsedSeconds);
                     
-                    // Применяем коэффициент для компенсации ограничений API
                     uploadSpeed = uploadSpeed * 2.5;
                     
                     return uploadSpeed;
@@ -1795,6 +1836,21 @@
             
             function updateProgress(percent) {
                 progressBar.style.width = percent + '%';
+            }
+            
+            function updateRemainingTime() {
+                const remainingMs = testEndTime - Date.now();
+                if (remainingMs <= 0) {
+                    document.getElementById('remainingTime').textContent = "00:00";
+                    return;
+                }
+                
+                const seconds = Math.floor((remainingMs / 1000) % 60);
+                const minutes = Math.floor(remainingMs / 60000);
+                
+                document.getElementById('remainingTime').textContent = 
+                    (minutes < 10 ? "0" : "") + minutes + ":" + 
+                    (seconds < 10 ? "0" : "") + seconds;
             }
         });
     </script>

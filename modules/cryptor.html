@@ -255,6 +255,33 @@
             margin-right: 10px;
             font-size: 18px;
         }
+
+        .sticky-footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(18, 18, 18, 0.97);
+            backdrop-filter: blur(10px);
+            padding: 1.1rem 0 0.7rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 4000;
+            width: 100vw;
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        @media (max-width: 600px) {
+            .sticky-footer {
+                font-size: 0.95rem;
+                padding: 0.7rem 0 0.5rem 0;
+            }
+        }
+        body { padding-bottom: 70px; }
     </style>
 </head>
 <body>
@@ -271,6 +298,7 @@
                 <li><a href="../scripts.html">Скрипты</a></li>
                 <li><a href="../tutorials.html">Туториалы</a></li>
                 <li><a href="../devices.html">Устройства</a></li>
+                <li><a href="../schemes.html">Схемы</a></li>
                 <li><a href="../tools.html">Инструменты</a></li>
                 <li><a href="../AI.html">ИИ Модели</a></li>
             </ul>
@@ -332,14 +360,11 @@
         </section>
     </main>
 
-    <footer>
-        <p>© 2025 chatgpthvh. Сделно с любовью ❤.</p>
-        <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
-            <i class="fab fa-telegram"></i> STICKLEDD
-        </a>
-        <div style="margin-top: 15px; text-align: center;">
-            <a href="https://t.me/+l7iFO2BkvLljNDFi" style="color: var(--primary-color); font-weight: bold; text-decoration: underline;">
-                <i class="fas fa-question-circle"></i> Не получается? Пишите в ТГ! Поможем!
+    <footer class="sticky-footer">
+        <div class="footer-content">
+            <div>© 2025 chatgpthvh. Сделано с любовью ❤.</div>
+            <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
+                <i class="fab fa-telegram"></i> STICKLEDD
             </a>
         </div>
     </footer>

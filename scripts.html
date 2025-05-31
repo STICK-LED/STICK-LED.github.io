@@ -8,6 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        main {
+            flex: 1;
+        }
+        
         .script-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -178,6 +189,7 @@
                 <li><a href="devices.html">Устройства</a></li>
                 <li><a href="tools.html">Инструменты</a></li>
                 <li><a href="AI.html">ИИ Модели</a></li>
+                <li><a href="schemes.html">Схемы</a></li>
             </ul>
         </nav>
     </header>
@@ -239,17 +251,14 @@ GUI-SHIFT 4 REPEAT 99999999</code></pre>
         </section>
     </main>
 
-    <footer>
-        <p>© 2025 chatgpthvh. Сделано с любовью ❤</p>
-        <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
-            <i class="fab fa-telegram"></i> STICKLEDD
-        </a>
-        <div style="margin-top: 15px; text-align: center;">
-            <a href="https://t.me/+l7iFO2BkvLljNDFi" style="color: var(--primary-color); font-weight: bold; text-decoration: underline;">
-                <i class="fas fa-question-circle"></i> Есть вопросы или проблемы? Пишите в ТГ! Поможем!
+    <footer class="sticky-footer">
+        <div class="footer-content">
+            <div>© 2025 chatgpthvh. Сделано с любовью ❤.</div>
+            <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
+                <i class="fab fa-telegram"></i> STICKLEDD
             </a>
         </div>
-    </footer>
+    </footer>   
 
     <script>
         function toggleDetails(id) {

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STICKLEDD - Схемы</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">STICKLEDD</div>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul id="nav-menu">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="scripts.html">Скрипты</a></li>
+                <li><a href="tutorials.html">Туториалы</a></li>
+                <li><a href="devices.html">Устройства</a></li>
+                <li><a href="schemes.html">Схемы</a></li>
+                <li><a href="tools.html">Инструменты</a></li>
+                <li><a href="AI.html">ИИ Модели</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="schemes" class="content-section">
+            <h2>Схемы</h2>
+            <div class="schemes-controls" style="display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;">
+                <label for="section-select" style="font-weight:500;">Секция:</label>
+                <select id="section-select" style="padding:0.4rem 1rem;border-radius:7px;border:1px solid #ccc;">
+                    <option value="all">Все</option>
+                    <option value="M5StickCPlus2">M5StickCPlus2</option>
+                    <option value="T-Embed">T-Embed</option>
+                </select>
+                <div class="search-input-wrapper">
+                    <span class="search-icon"><i class="fas fa-search"></i></span>
+                    <input id="scheme-search" type="text" placeholder="Поиск по схемам..." />
+                </div>
+            </div>
+            <div class="schemes-grid">
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="NRF24L01 → M5StickPlus2" data-desc="Как подключить NRF24L01 к M5StickPlus2" onclick="showSchemeModal('nrf24l01')">
+                    <div class="scheme-card-preview"><img src="schemes/nrf24l01.png" alt="NRF24L01 схема"></div>
+                    <div class="scheme-card-title">NRF24L01 → M5StickPlus2</div>
+                    <div class="scheme-card-desc">Как подключить NRF24L01 к M5StickPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="IR → M5StickCPlus2" data-desc="Как подключить IR к M5StickCPlus2" onclick="showSchemeModal('ir')">
+                    <div class="scheme-card-preview"><img src="schemes/ir.png" alt="IR"></div>
+                    <div class="scheme-card-title">IR → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить IR к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="CC1101 → M5StickCPlus2" data-desc="Как подключить CC1101 к M5StickCPlus2" onclick="showSchemeModal('cc1101')">
+                    <div class="scheme-card-preview"><img src="schemes/cc1101.png" alt="CC1101"></div>
+                    <div class="scheme-card-title">CC1101 → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить CC1101 к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="IR Receiver → M5StickCPlus2" data-desc="Как подключить IR Receiver к M5StickCPlus2" onclick="showSchemeModal('ir-receiver')">
+                    <div class="scheme-card-preview"><img src="schemes/reciver.jpg" alt="IR Receiver"></div>
+                    <div class="scheme-card-title">IR Receiver → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить IR Receiver к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="IR Transmitter → M5StickCPlus2" data-desc="Как подключить IR Transmitter к M5StickCPlus2" onclick="showSchemeModal('ir-transmitter')">
+                    <div class="scheme-card-preview"><img src="schemes/transmitter.jpg" alt="IR Transmitter"></div>
+                    <div class="scheme-card-title">IR Transmitter → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить IR Transmitter к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="PN532 SPI → M5StickCPlus2" data-desc="Как подключить PN532 по SPI к M5StickCPlus2" onclick="showSchemeModal('pn532-spi')">
+                    <div class="scheme-card-preview"><img src="schemes/PN532 SPI.jpg" alt="PN532 SPI"></div>
+                    <div class="scheme-card-title">PN532 SPI → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить PN532 по SPI к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="PN532 I2C → M5StickCPlus2" data-desc="Как подключить PN532 по I2C к M5StickCPlus2" onclick="showSchemeModal('pn532-i2c')">
+                    <div class="scheme-card-preview"><img src="schemes/PN532 12C.jpg" alt="PN532 I2C"></div>
+                    <div class="scheme-card-title">PN532 I2C → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить PN532 по I2C к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="T-Embed" data-title="T-Embed Example" data-desc="Example T-Embed" onclick="showSchemeModal('tembed')">
+                    <div class="scheme-card-preview"><img src="schemes/tembed.png" alt="T-Embed Example"></div>
+                    <div class="scheme-card-title">Example T-Embed</div>
+                    <div class="scheme-card-desc">Example T-Embed</div>
+                </div>
+                <div class="scheme-card" data-section="T-Embed" data-title="NRF24 → T-Embed" data-desc="Как подключить NRF24 к T-Embed" onclick="showSchemeModal('nrf24-tembed')">
+                    <div class="scheme-card-preview"><img src="schemes/nrf24embed.jpg" alt="NRF24 схема для T-Embed"></div>
+                    <div class="scheme-card-title">NRF24 → T-Embed</div>
+                    <div class="scheme-card-desc">Как подключить NRF24 к T-Embed</div>
+                </div>
+                <div class="scheme-card" data-section="T-Embed" data-title="NRF24 2 → T-Embed" data-desc="Как подключить NRF24 2 к T-Embed" onclick="showSchemeModal('nrf24-tembed2')">
+                    <div class="scheme-card-preview"><img src="schemes/nrf24embed2.jpg" alt="NRF24 2 схема для T-Embed"></div>
+                    <div class="scheme-card-title">NRF24 2 → T-Embed</div>
+                    <div class="scheme-card-desc">Как подключить NRF24 2 к T-Embed</div>
+                </div>
+                <div class="scheme-card" data-section="T-Embed" data-title="IR Transmitter → T-Embed" data-desc="Как подключить IR Transmitter к T-Embed" onclick="showSchemeModal('irtr-tembed')">
+                    <div class="scheme-card-preview preview-irtrembed"><img src="schemes/irtrembed.jpg" alt="IR Transmitter схема для T-Embed"></div>
+                    <div class="scheme-card-title">IR Transmitter → T-Embed</div>
+                    <div class="scheme-card-desc">Как подключить IR Transmitter к T-Embed</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="СН9329 (USB) → M5StickCPlus2" data-desc="Как подключить СН9329 (USB) к M5StickCPlus2" onclick="showSchemeModal('ch9329-usb')">
+                    <div class="scheme-card-preview"><img src="schemes/СН9329 (usb).jpg" alt="СН9329 (USB)"></div>
+                    <div class="scheme-card-title">СН9329 (USB) → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить СН9329 (USB) к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="Micro SD → M5StickCPlus2" data-desc="Как подключить Micro SD к M5StickCPlus2" onclick="showSchemeModal('microsd')">
+                    <div class="scheme-card-preview"><img src="schemes/microsd.jpg" alt="Micro SD"></div>
+                    <div class="scheme-card-title">Micro SD → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить Micro SD к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="Micro SD 2 → M5StickCPlus2" data-desc="Как подключить Micro SD 2 к M5StickCPlus2" onclick="showSchemeModal('microsd2')">
+                    <div class="scheme-card-preview"><img src="schemes/Micro SD 2.jpg" alt="Micro SD 2"></div>
+                    <div class="scheme-card-title">Micro SD 2 → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить Micro SD 2 к M5StickCPlus2</div>
+                </div>
+                <div class="scheme-card" data-section="M5StickCPlus2" data-title="Si4713 (FM) → M5StickCPlus2" data-desc="Как подключить Si4713 (FM) к M5StickCPlus2" onclick="showSchemeModal('si4713-fm')">
+                    <div class="scheme-card-preview"><img src="schemes/Si4713 (FM).jpg" alt="Si4713 (FM)"></div>
+                    <div class="scheme-card-title">Si4713 (FM) → M5StickCPlus2</div>
+                    <div class="scheme-card-desc">Как подключить Si4713 (FM) к M5StickCPlus2</div>
+                </div>
+            </div>
+            <div id="scheme-modal" class="scheme-modal">
+                <div class="scheme-modal-content">
+                    <span class="close-scheme-modal" onclick="closeSchemeModal()">&times;</span>
+                    <h3 id="scheme-title">NRF24L01 → M5StickPlus2</h3>
+                    <a id="scheme-img-link" href="assets/nrf24l01.png" target="_blank">
+                        <img id="scheme-img" src="assets/nrf24l01.png" alt="nrf24l01 схема" style="max-width:100%;border-radius:10px;margin-bottom:1.5rem;box-shadow:0 4px 16px rgba(0,0,0,0.2);cursor:zoom-in;">
+                    </a>
+                    <p id="scheme-desc">Как подключить NRF24L01 к M5StickPlus2</p>
+                    <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn scheme-tg-btn" target="_blank">
+                        <i class="fab fa-telegram"></i> Не получается? Пишите в ТГ — поможем!
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="sticky-footer">
+        <div class="footer-content">
+            <div>© 2025 chatgpthvh. Сделано с любовью ❤.</div>
+            <a href="https://t.me/+l7iFO2BkvLljNDFi" class="telegram-btn">
+                <i class="fab fa-telegram"></i> STICKLEDD
+            </a>
+        </div>
+    </footer>
+
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        function showSchemeModal(scheme) {
+            if (scheme === 'nrf24l01') {
+                document.getElementById('scheme-title').textContent = 'NRF24L01 → M5StickPlus2';
+                document.getElementById('scheme-img').src = 'schemes/nrf24l01.png';
+                document.getElementById('scheme-img').alt = 'nrf24l01';
+                document.getElementById('scheme-img-link').href = 'schemes/nrf24l01.png';
+            } else if (scheme === 'ir') {
+                document.getElementById('scheme-title').textContent = 'IR → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/ir.png';
+                document.getElementById('scheme-img').alt = 'IR';
+                document.getElementById('scheme-desc').textContent = 'IR → M5StickCPlus2.';
+                document.getElementById('scheme-img-link').href = 'schemes/ir.png';
+            } else if (scheme === 'cc1101') {
+                document.getElementById('scheme-title').textContent = 'CC1101 → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/cc1101.png';
+                document.getElementById('scheme-img').alt = 'CC1101';
+                document.getElementById('scheme-desc').textContent = 'CC1101 → M5StickCPlus2.';
+                document.getElementById('scheme-img-link').href = 'schemes/cc1101.png';
+            } else if (scheme === 'ir-receiver') {
+                document.getElementById('scheme-title').textContent = 'IR Receiver → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/reciver.jpg';
+                document.getElementById('scheme-img').alt = 'IR Receiver';
+                document.getElementById('scheme-desc').textContent = 'IR Receiver → M5StickCPlus2.';
+                document.getElementById('scheme-img-link').href = 'schemes/reciver.jpg';
+            } else if (scheme === 'ir-transmitter') {
+                document.getElementById('scheme-title').textContent = 'IR Transmitter → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/transmitter.jpg';
+                document.getElementById('scheme-img').alt = 'IR Transmitter';
+                document.getElementById('scheme-desc').textContent = 'IR Transmitter → M5StickCPlus2.';
+                document.getElementById('scheme-img-link').href = 'schemes/transmitter.jpg';
+            } else if (scheme === 'pn532-spi') {
+                document.getElementById('scheme-title').textContent = 'PN532 SPI → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/PN532 SPI.jpg';
+                document.getElementById('scheme-img').alt = 'PN532 SPI схема';
+                document.getElementById('scheme-desc').textContent = 'PN532 SPI → M5StickCPlus2';
+                document.getElementById('scheme-img-link').href = 'schemes/PN532 SPI.jpg';
+            } else if (scheme === 'pn532-i2c') {
+                document.getElementById('scheme-title').textContent = 'PN532 I2C → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/PN532 12C.jpg';
+                document.getElementById('scheme-img').alt = 'PN532 I2C схема';
+                document.getElementById('scheme-desc').textContent = 'PN532 I2C → M5StickCPlus2';
+                document.getElementById('scheme-img-link').href = 'schemes/PN532 12C.jpg';
+            } else if (scheme === 'ch9329-usb') {
+                document.getElementById('scheme-title').textContent = 'CH9329 (USB) → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/СН9329 (usb).jpg';
+                document.getElementById('scheme-img').alt = 'CH9329 (USB) схема';
+                document.getElementById('scheme-desc').textContent = 'CH9329 (USB) → M5StickCPlus2';
+                document.getElementById('scheme-img-link').href = 'schemes/СН9329 (usb).jpg';
+            } else if (scheme === 'microsd') {
+                document.getElementById('scheme-title').textContent = 'Micro SD → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/microsd.jpg';
+                document.getElementById('scheme-img').alt = 'Micro SD';
+                document.getElementById('scheme-desc').textContent = 'Micro SD → M5StickCPlus2';
+                document.getElementById('scheme-img-link').href = 'schemes/microsd.jpg';
+            } else if (scheme === 'microsd2') {
+                document.getElementById('scheme-title').textContent = 'Micro SD 2 → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/Micro SD 2.jpg';
+                document.getElementById('scheme-img').alt = 'Micro SD 2';
+                document.getElementById('scheme-desc').textContent = 'Micro SD 2 → M5StickCPlus2';
+                document.getElementById('scheme-img-link').href = 'schemes/Micro SD 2.jpg';
+            } else if (scheme === 'si4713-fm') {
+                document.getElementById('scheme-title').textContent = 'Si4713 (FM) → M5StickCPlus2';
+                document.getElementById('scheme-img').src = 'schemes/Si4713 (FM).jpg';
+                document.getElementById('scheme-img').alt = 'Si4713 (FM)';
+                document.getElementById('scheme-desc').textContent = 'Si4713 (FM) → M5StickCPlus2';
+                document.getElementById('scheme-img-link').href = 'schemes/Si4713 (FM).jpg';
+            } else if (scheme === 'tembed') {
+                document.getElementById('scheme-title').textContent = 'T-Embed Example';
+                document.getElementById('scheme-img').src = 'schemes/tembed.png';
+                document.getElementById('scheme-img').alt = 'T-Embed Example';
+                document.getElementById('scheme-desc').textContent = 'Example T-Embed.';
+                document.getElementById('scheme-img-link').href = 'schemes/embed.png';
+            } else if (scheme === 'nrf24-tembed') {
+                document.getElementById('scheme-title').textContent = 'NRF24 → T-Embed';
+                document.getElementById('scheme-img').src = 'schemes/nrf24embed.jpg';
+                document.getElementById('scheme-img').alt = 'NRF24';
+                document.getElementById('scheme-desc').textContent = 'NRF24 → T-Embed';
+                document.getElementById('scheme-img-link').href = 'schemes/nrf24embed.jpg';
+            } else if (scheme === 'nrf24-tembed2') {
+                document.getElementById('scheme-title').textContent = 'NRF24 2 → T-Embed';
+                document.getElementById('scheme-img').src = 'schemes/nrf24embed2.jpg';
+                document.getElementById('scheme-img').alt = 'NRF24 2';
+                document.getElementById('scheme-desc').textContent = 'NRF24 2 → T-Embed';
+                document.getElementById('scheme-img-link').href = 'schemes/nrf24embed2.jpg';
+            } else if (scheme === 'irtr-tembed') {
+                document.getElementById('scheme-title').textContent = 'IR Transmitter → T-Embed';
+                document.getElementById('scheme-img').src = 'schemes/irtrembed.jpg';
+                document.getElementById('scheme-img').alt = 'IR Transmitter';
+                document.getElementById('scheme-desc').textContent = 'IR Transmitter → T-Embed';
+                document.getElementById('scheme-img-link').href = 'schemes/irtrembed.jpg';
+            }
+            document.getElementById('scheme-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSchemeModal() {
+            document.getElementById('scheme-modal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            });
+            const menuItems = navMenu.querySelectorAll('a');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navMenu.classList.remove('active');
+                });
+            });
+            document.addEventListener('click', function(event) {
+                if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
+            document.getElementById('scheme-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeSchemeModal();
+            });
+            const sectionSelect = document.getElementById('section-select');
+            const searchInput = document.getElementById('scheme-search');
+            const schemeCards = document.querySelectorAll('.scheme-card');
+            function filterSchemes() {
+                const section = sectionSelect.value;
+                const search = searchInput.value.trim().toLowerCase();
+                schemeCards.forEach(card => {
+                    const cardSection = card.getAttribute('data-section');
+                    const title = card.getAttribute('data-title').toLowerCase();
+                    const desc = card.getAttribute('data-desc').toLowerCase();
+                    const matchesSection = (section === 'all' || cardSection === section);
+                    const matchesSearch = (!search || title.includes(search) || desc.includes(search));
+                    card.style.display = (matchesSection && matchesSearch) ? '' : 'none';
+                });
+            }
+            sectionSelect.addEventListener('change', filterSchemes);
+            searchInput.addEventListener('input', filterSchemes);
+            filterSchemes();
+
+            const backToTopButton = document.getElementById('back-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 100) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+    <style>
+
+    #schemes h2 {
+        color: var(--primary-color, #ff8c00);
+        font-size: 2.8rem;
+        text-align: center;
+        margin-bottom: 2.5rem;
+        text-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        position: relative;
+    }
+
+    #schemes h2::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: var(--primary-color, #ff8c00);
+        margin: 10px auto 0;
+        border-radius: 2px;
+    }
+
+    .schemes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    .scheme-card {
+        background-color: var(--bg-card);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+        text-align: center;
+    }
+    .scheme-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        background-color: var(--bg-card-hover);
+        border-color: rgba(255, 140, 0, 0.3);
+    }
+    .scheme-card-preview {
+        width: 100%;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .scheme-card-preview img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    .scheme-card-icon {
+        display: none;
+    }
+    .scheme-card-title {
+        color: var(--primary-light);
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    .scheme-card-desc {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    @media (max-width: 768px) {
+        .schemes-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .scheme-modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(10,10,10,0.75);
+        z-index: 3000;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.3s;
+    }
+    .scheme-modal-content {
+        background: var(--bg-card);
+        border-radius: 18px;
+        padding: 2.5rem 2rem 2rem 2rem;
+        max-width: 800px;
+        width: 98vw;
+        box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+        position: relative;
+        text-align: center;
+        animation: fadeInModal 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .close-scheme-modal {
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        font-size: 2.2rem;
+        color: var(--primary-color);
+        cursor: pointer;
+        font-weight: bold;
+        transition: color 0.2s, transform 0.2s;
+    }
+    .close-scheme-modal:hover {
+        color: var(--accent-color);
+        transform: rotate(90deg) scale(1.1);
+    }
+    @keyframes fadeInModal {
+        from { opacity: 0; transform: translateY(30px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .scheme-tg-btn {
+        display: inline-block;
+        margin-top: 2.2rem;
+    }
+    .sticky-footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(18, 18, 18, 0.97);
+        backdrop-filter: blur(10px);
+        padding: 1.1rem 0 0.7rem 0;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        z-index: 4000;
+        width: 100vw;
+    }
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2rem;
+    }
+    .footer-logo {
+        font-family: var(--font-main);
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        color: var(--primary-color);
+        margin-top: 0.2rem;
+    }
+    @media (max-width: 600px) {
+        .sticky-footer {
+            font-size: 0.95rem;
+            padding: 0.7rem 0 0.5rem 0;
+        }
+        .footer-logo {
+            font-size: 1.05rem;
+        }
+    }
+    body {
+        font-family: 'Orbitron', sans-serif;
+        color: #e0e0e0;
+        background-color: #0a0a0a;
+        background-image: 
+            linear-gradient(15deg, #181818 0%, #232323 100%),
+            radial-gradient(circle at 75% 100%, rgba(255, 140, 0, 0.02) 0%, transparent 40%),
+            radial-gradient(circle at 25% 100%, rgba(255, 140, 0, 0.01) 0%, transparent 40%);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+    .search-input-wrapper {
+        position: relative;
+        flex: 1;
+        min-width: 180px;
+        max-width: 350px;
+        display: flex;
+        align-items: center;
+        background-color: rgba(30, 30, 30, 0.8);
+        border-radius: 10px;
+        border: 1.5px solid rgba(255, 140, 0, 0.2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+    .search-input-wrapper:focus-within {
+        border-color: var(--primary-color, #ff8c00);
+        box-shadow: 0 4px 20px rgba(255,140,0,0.3);
+        background-color: rgba(40, 40, 40, 0.9);
+    }
+    .search-input-wrapper .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted, #aaa);
+        font-size: 1.1rem;
+        pointer-events: none;
+        transition: color 0.3s ease;
+    }
+    .search-input-wrapper:focus-within .search-icon {
+        color: var(--primary-color, #ff8c00);
+    }
+    #scheme-search {
+        width: 100%;
+        padding: 0.5rem 1rem 0.5rem 2.5rem;
+        border-radius: 10px;
+        border: none;
+        background: transparent;
+        font-size: 1rem;
+        outline: none;
+        color: var(--text-color, #e0e0e0);
+    }
+    #scheme-search::placeholder {
+        color: var(--text-muted, #aaa);
+        opacity: 0.8;
+    }
+    @media (max-width: 600px) {
+        .search-input-wrapper {
+            max-width: 100%;
+        }
+        #scheme-search {
+            font-size: 0.98rem;
+            padding-left: 2.1rem;
+        }
+    }
+    .back-to-top {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 2500;
+        border: none;
+        outline: none;
+        background-color: rgba(255, 140, 0, 0.7);
+        color: white;
+        cursor: pointer;
+        padding: 12px 15px;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        transition: background-color 0.3s, opacity 0.5s, transform 0.3s;
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    .back-to-top:hover {
+        background-color: var(--primary-color, #ff8c00);
+        transform: scale(1);
+    }
+
+    .back-to-top.show {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .sticky-footer {
+        padding-bottom: 40px;
+    }
+
+    @media (max-width: 600px) {
+        .back-to-top {
+            bottom: 15px;
+            right: 15px;
+            padding: 10px 12px;
+            font-size: 1.2rem;
+        }
+        .sticky-footer {
+            padding-bottom: 30px;
+        }
+    }
+
+    #section-select {
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        border: 1.5px solid rgba(255, 140, 0, 0.2);
+        background-color: rgba(30, 30, 30, 0.8);
+        color: var(--text-color, #e0e0e0);
+        font-size: 1rem;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex-grow: 0;
+    }
+
+    #section-select:hover,
+    #section-select:focus {
+        border-color: var(--primary-color, #ff8c00);
+        box-shadow: 0 4px 15px rgba(255,140,0,0.3);
+        background-color: rgba(40, 40, 40, 0.9);
+    }
+
+    .schemes-controls label[for="section-select"]::after {
+        content: '\f078';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: relative;
+        left: -20px;
+        color: var(--text-muted, #aaa);
+        pointer-events: none;
+        transition: color 0.3s ease;
+    }
+
+    #section-select:hover + label::after,
+    #section-select:focus + label::after {
+        color: var(--primary-color, #ff8c00);
+    }
+
+    /* Specific style for IR Transmitter T-Embed preview image */
+    .scheme-card-preview.preview-irtrembed img {
+        width: 50%; /* Make the image 50% of its container width */
+        height: auto; /* Maintain aspect ratio */
+        display: block; /* Ensure it behaves like a block element */
+        margin: 0 auto; /* Center the image horizontally */
+    }
+    </style>
+</body>
+</html>
